@@ -9,9 +9,9 @@ import java.util.Optional;
 @Service
 public interface OrderService {
     List<Order> findAll();
-    Optional<Order> findById(String id);
+    Order findById(String id);
     Order create(Order newOrder);
     Order update(String id, Order newOrder);
-    boolean delete(String id);
+    void delete(String id);
     List<Order> getOrdersByUserId(String userId);
 }

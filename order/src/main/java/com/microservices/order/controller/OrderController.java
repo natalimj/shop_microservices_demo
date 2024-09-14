@@ -28,7 +28,8 @@ public class OrderController {
 
     @PostMapping()
     public ResponseEntity create(@RequestBody Order newOrder) {
-        return new ResponseEntity<>(orderService.create(newOrder), HttpStatus.OK);
+        System.out.println("in controller");
+        return new ResponseEntity<>(orderService.create(newOrder), HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/{id}")
@@ -38,7 +39,7 @@ public class OrderController {
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity delete(@PathVariable(value = "id") String id) {
-        return new ResponseEntity<>(orderService.delete(id), HttpStatus.OK);
+        return new ResponseEntity<>("Deleted order successfully", HttpStatus.OK);
     }
 
     @GetMapping("/user/{userId}")
