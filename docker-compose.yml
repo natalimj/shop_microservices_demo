@@ -1,0 +1,52 @@
+version: '3.9'
+services:
+  # User microservice
+  user-service:
+    container_name: 'user_service'
+    ports:
+      - "8001:8001"
+    build:
+      context: ./user
+      dockerfile: Dockerfile
+    depends_on:
+      - user-database
+    environment:
+      - "JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8001 -Xms128m -Xmx256m"
+      - "SPRING_DATASOURCE_URL=product-database:27018/user"
+      - "SERVER_PORT=8001"
+      - "SPRING_APPLICATION_NAME=user-microservice"
+      - "SERVER_SERVLET_CONTEXTPATH=/api/v1"
+      - "SPRING_DATA_MONGODB_PORT=27018"
+      - "SPRING_DATA_MONGODB_DATABASE=user"
+      - "SPRING_DATA_MONGODB_HOST=user-database"
+  # MongoDB instance for User microservice
+  user-database:
+    container_name: 'user_database'
+    ports:
+      - "27018:27018"
+    image: mongo
+  # Order microservice
+  order-service:
+    container_name: 'order_service'
+    ports:
+      - "8002:8002"
+    build:
+      context: ./order
+      dockerfile: Dockerfile
+    depends_on:
+      - order-database
+    environment:
+      - "JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8002 -Xms128m -Xmx256m"
+      - "SPRING_DATASOURCE_URL=product-database:27019/order"
+      - "SPRING_DATA_MONGODB_HOST=order-database"
+      - "SPRING_DATA_MONGODB_PORT=27019"
+      - "SPRING_DATA_MONGODB_DATABASE=order"
+      - "SERVER_PORT=8002"
+      - "SPRING_APPLICATION_NAME=order-microservice"
+      - "SERVER_SERVLET_CONTEXTPATH=/api/v1"
+  # MongoDB instance for Order microservice
+  order-database:
+    container_name: 'order_database'
+    ports:
+      - "27019:27019"
+    image: mongo
